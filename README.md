@@ -1,2 +1,2 @@
 # GRAND-FATHER
-init
+init test
