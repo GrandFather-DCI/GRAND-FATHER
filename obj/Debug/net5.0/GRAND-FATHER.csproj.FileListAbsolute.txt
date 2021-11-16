@@ -1,0 +1,16 @@
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.exe
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.deps.json
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.runtimeconfig.json
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.runtimeconfig.dev.json
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.dll
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\ref\GRAND-FATHER.dll
+C:\Users\83561\Desktop\GRAND-FATHER\bin\Debug\net5.0\GRAND-FATHER.pdb
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.csproj.AssemblyReference.cache
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.AssemblyInfoInputs.cache
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.AssemblyInfo.cs
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.csproj.CoreCompileInputs.cache
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.dll
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\ref\GRAND-FATHER.dll
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.pdb
+C:\Users\83561\Desktop\GRAND-FATHER\obj\Debug\net5.0\GRAND-FATHER.genruntimeconfig.cache
