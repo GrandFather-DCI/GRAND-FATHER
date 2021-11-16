@@ -5,7 +5,7 @@ namespace GRAND_FATHER
     public class GameBoard
     {
 
-        public static ChessPiece[,] board = new ChessPiece[10, 9]; //棋子的棋盘
+        public static ChessPiece[,] board = new ChessPiece[10, 9]; //initialize an actual chessboard to store chesspiece and all the moving method
 
         public static int posx;
         public static int posy;
@@ -135,7 +135,7 @@ namespace GRAND_FATHER
 
         }
 
-        public void JudgeSide()
+        public void JudgeSide()//Determine whether the player select his or her opponent's chesspiece or select an empty place
         {
             if (turn % 2 == 0)
             {
@@ -162,7 +162,7 @@ namespace GRAND_FATHER
             turn++;
         }
 
-        public void InValidMove()
+        public void InValidMove()//Judge whether the destination's coordinate is the same as the starting point's coordinate and let player to select piece again once this condition happen 
         {
             while (posx == posx2 && posy == posy2)
             {
@@ -175,7 +175,7 @@ namespace GRAND_FATHER
                 SelectPosition();
             }
         }
-        public void SelectPiece()
+        public void SelectPiece()//Method of selecting piece
         {
             if (turn % 2 == 0)
             {
@@ -220,7 +220,7 @@ namespace GRAND_FATHER
 
 
 
-        public void SelectPosition()
+        public void SelectPosition()//Method of selecting destination
         {
             if (turn % 2 == 0)
             {
@@ -272,6 +272,7 @@ namespace GRAND_FATHER
             GameDisplay.displayboard[posy2, posx2] = GameDisplay.displayboard[posy, posx];
             GameBoard.board[posy2 / 2, posx2 / 2] = GameBoard.board[posy / 2, posx / 2];
             GameBoard.board[posy / 2, posx / 2] = null;
+            //The following sentence is to recover the displayboard
             if (posy == 0)
             {
                 if (posx == 0) GameDisplay.displayboard[posy, posx] = "┏-";
@@ -306,7 +307,7 @@ namespace GRAND_FATHER
 
         }
 
-        public void JudgeMoveRules()
+        public void JudgeMoveRules()//Judge whether the move is valid or not, if the move is invalid, ask the player to select again
         {
 
             while (MovesJudge() == false)
@@ -321,7 +322,7 @@ namespace GRAND_FATHER
         }
 
 
-        public bool MovesJudge()
+        public bool MovesJudge()//While JudgeMoveRule is pass,which means this move is valid,then determine whether this move satisfy the selected piece's corresponding moving method or not
         {
             if (board[posy / 2, posx / 2].Move() == false) { return false; }
             else return true;
