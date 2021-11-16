@@ -10,7 +10,7 @@ namespace GRAND_FATHER
     {
         red,
         black,
-        blank,
+
     }
 
 
@@ -24,14 +24,11 @@ namespace GRAND_FATHER
         Cannon,
         Soldier,
         Default,
-        //  blank,
     }
 
 
     public class ChessPiece
     {
-
-        //  public ChessBoard Position {get;}
 
 
         public Side Side { get; set; }
