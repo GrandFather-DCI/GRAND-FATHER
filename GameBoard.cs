@@ -5,7 +5,7 @@ namespace GRAND_FATHER
     public class GameBoard
     {
 
-        public static ChessPiece[,] board = new ChessPiece[10, 9]; //Create an actual chessboard to store chesspiece and all the moving method is based on this board
+        public static ChessPiece[,] board = new ChessPiece[10, 9]; //棋子的棋盘
 
         public static int posx;
         public static int posy;
@@ -20,10 +20,10 @@ namespace GRAND_FATHER
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    board[i, j] = null;//Fill the board with "null" at the beginning to initialize the board
+                    board[i, j] = null; //new blank(Side.blank);//初始化null
                 }
             }
-            //Create chesspieces on the actual board
+
             board[0, 0] = new Chariot(Side.black);
             board[0, 1] = new Horse(Side.black);
             board[0, 2] = new Elephant(Side.black);
@@ -59,7 +59,6 @@ namespace GRAND_FATHER
             board[6, 6] = new Soldier(Side.red);
             board[6, 8] = new Soldier(Side.red);
 
-            //Using "ToString()" method which were stored in Chesspiece object to present Chinese Character on the displayboard
             GameDisplay.displayboard[0, 0] = board[0, 0].ToString();
             GameDisplay.displayboard[0, 2] = board[0, 1].ToString();
             GameDisplay.displayboard[0, 4] = board[0, 2].ToString();
@@ -99,24 +98,24 @@ namespace GRAND_FATHER
         }
 
 
-        public static void DrawingBoard()//Print the displayboard on console
+        public static void DrawingBoard()
         {
 
             Console.Clear();
 
             for (int a = 0; a < 19; a++)
             {
-                Console.BackgroundColor = ConsoleColor.White;//define the background color of console table.
+                Console.BackgroundColor = ConsoleColor.White;
                 for (int b = 0; b < 18; b++)
                 {
 
                     if (board[a / 2, b / 2] == null)
-                        Console.ForegroundColor = ConsoleColor.Blue;//define the color of displayboard
-                    else if (board[a / 2, b / 2].Side == Side.red)//define the color of red pieces, only when the piece's side is belong to red side,the following sentences would work
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                    else if (board[a / 2, b / 2].Side == Side.red)
                     {
                         if (b % 2 == 1 || a % 2 == 1)
                             Console.ForegroundColor = ConsoleColor.Blue;
-                        else Console.ForegroundColor = ConsoleColor.DarkRed;
+                        else Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     }
                     else if (board[a / 2, b / 2].Side == Side.black)
                     {
@@ -131,83 +130,86 @@ namespace GRAND_FATHER
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
-            Console.WriteLine(" 0   1   2   3   4   5   6   7   8 ");//presenting at the bottom of chessboard to declare the coordinates for player to choose
+            Console.WriteLine(" 0   1   2   3   4   5   6   7   8 ");
 
 
         }
 
         public void JudgeSide()
         {
-            if (turn % 2 == 0)//The first turn is black player's turn
+            if (turn % 2 == 0)
             {
-                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.red))//Judge whether the black player select red player's chesspiece or select an empty place
+                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.red))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;//All the alert messages should be red to draw players attention
-                    Console.WriteLine("You select the wrong piece!");
-                    Console.WriteLine("Please press enter and select your side and enter again!");
-                    ClearWrongInput();//To clear the error input to let console looks concise
-                    SelectPiece();//Ask player to select again
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("You select the wrong side!");
+                    Console.WriteLine("Please select your side and enter again!");
+                    Console.Write("\n");
+                    SelectPiece();
                 }
             }
             if (turn % 2 == 1)
             {
-                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.black))//Judge whether the black player select red player's chesspiece or select an empty place
+                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.black))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;//All the alert messages should be red to draw players attention
-                    Console.WriteLine("You select the wrong piece!");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("You select the wrong side!");
                     Console.WriteLine("Please select your side and enter again!");
-                    ClearWrongInput();//To clear the error input to let console looks concise
-                    SelectPiece();//Ask player to select again
+                    Console.Write("\n");
+                    SelectPiece();
                 }
             }
             turn++;
         }
 
-        public void InValidMove()//Judge whether the destination's coordinate is the as the starting point's coordinate, and let player to select pieces again once this condition happened
+        public void InValidMove()
         {
             while (posx == posx2 && posy == posy2)
             {
-                turn--;//When the player have made invalid input, "turn" will minus 1 in order to let this player to have his or her turn again
+                turn--;
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Your destination is the same as your starting point!!!!");
-                Console.WriteLine("Please press enter and choose again!");
-                ClearWrongInput();
+                Console.WriteLine("Please choose again!");
                 SelectPiece();
                 JudgeSide();
                 SelectPosition();
             }
         }
-        public void SelectPiece()//Method of selecting pieces
+        public void SelectPiece()
         {
-            if (turn % 2 == 0)//When this is black player's turn
+            if (turn % 2 == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("\n");
                 Console.WriteLine("-------It's BLACK turn!!!-------\nWhich piece do you want to move?(PLEASE INPUT TWO NUMBERS. Like: 11)");
             }
-            if (turn % 2 == 1)//When this is red player's turn
+            if (turn % 2 == 1)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine("\n");
                 Console.WriteLine("-------It's RED turn!!!-------\nWhich piece do you want to move?(PLEASE INPUT TWO NUMBERS. Like: 98)");
             }
-            Console.WriteLine("First number is for Y-axis (0-9)\nSecond number is for X-axis (0-8)");//Mindful tip to remind player how to input 
+            Console.WriteLine("First number is for Y-axis (0-9)\nSecond number is for X-axis (0-8)");
 
 
-            string position = Console.ReadLine();//receive player's input 
+            string position = Console.ReadLine();
 
-            while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0' || position.Length != 2)//Judge whether the player have input a coordinate which outside the chessboard
+            while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0')
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This piece does not exist! Please press enter and enter again");
-                ClearWrongInput();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Please select your piece and please input only 2 numbers!");
+                Console.WriteLine("This piece does not exist!");
+                Console.WriteLine("Please enter again!");
                 position = Console.ReadLine();
 
             }
 
-            //Receive player's input and convert its input's coordinates for JudgeMoveRule to judge the move is valid or not 
+            while (position.Length != 2)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Please input only 2 number");
+                position = Console.ReadLine();
+            }
+
             string position1, position2;
             position1 = position.Substring(0, 1);
             position2 = position.Substring(1);
@@ -222,7 +224,7 @@ namespace GRAND_FATHER
         {
             if (turn % 2 == 0)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
             }
             if (turn % 2 == 1)
             {
@@ -230,19 +232,22 @@ namespace GRAND_FATHER
             }
 
             Console.WriteLine("Please enter the position you want to move:");
-            string position = Console.ReadLine();//receive player's input 
+            string position = Console.ReadLine();
 
-             while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0' || position.Length != 2)//Judge whether the player have input a coordinate which outside the chessboard
+             while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0')
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This piece does not exist! Please press enter and enter again");
-                ClearWrongInput();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Please select your destination and please input only 2 numbers!");
+                Console.WriteLine("Your move is invalid!!");
+                Console.WriteLine("Please enter again!");
                 position = Console.ReadLine();
             }
-            
-            //Receive player's input and convert its input's coordinates for JudgeMoveRule to judge the move is valid or not 
+            while (position.Length != 2)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Please input only 2 number");
+                position = Console.ReadLine();
+            }
+
             string position1, position2;
 
             position1 = position.Substring(0, 1);
@@ -253,18 +258,20 @@ namespace GRAND_FATHER
 
         public void MovePiece(int posy, int posx, int posy2, int posx2)
         {
-            //Once the destination is general and this move is valid, the game will over
-            if (GameDisplay.displayboard[posy2, posx2] == "帅" || GameDisplay.displayboard[posy2, posx2] == "将")
+
+            if (GameDisplay.displayboard[posy2, posx2] == "帅")
+                Gameover = 2;
+
+            if(GameDisplay.displayboard[posy2, posx2] == "将")
                 Gameover = 1;
 
-            if (GameBoard.board[posy2 / 2, posx2 / 2] == GameBoard.board[posy / 2, posx / 2])//When the destination is as the same as starting point , jump to InValidMove and execute its mothod
+            if (GameBoard.board[posy2 / 2, posx2 / 2] == GameBoard.board[posy / 2, posx / 2])
             {
                 InValidMove();
             }
-            GameDisplay.displayboard[posy2, posx2] = GameDisplay.displayboard[posy, posx];//The Character of the starting point on the displayboard move to the destination,and display on displayboard
-            GameBoard.board[posy2 / 2, posx2 / 2] = GameBoard.board[posy / 2, posx / 2];//The chesspiece in actual board move to the destination on actual board
-            GameBoard.board[posy / 2, posx / 2] = null;//Use null to replace the starting point in actual board
-            //The following sentences is to recover the displaboard once a piece have moved
+            GameDisplay.displayboard[posy2, posx2] = GameDisplay.displayboard[posy, posx];
+            GameBoard.board[posy2 / 2, posx2 / 2] = GameBoard.board[posy / 2, posx / 2];
+            GameBoard.board[posy / 2, posx / 2] = null;
             if (posy == 0)
             {
                 if (posx == 0) GameDisplay.displayboard[posy, posx] = "┏-";
@@ -299,38 +306,29 @@ namespace GRAND_FATHER
 
         }
 
-        public void JudgeMoveRules()//Judge whether the move is valid or not, if the move is invalid, ask player to select again
+        public void JudgeMoveRules()
         {
 
             while (MovesJudge() == false)
             {   
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nYour move is invalid!");
-                Console.WriteLine("Please press enter and enter again!");
-                ClearWrongInput();
-                turn -- ;
-                SelectPiece();
-                JudgeSide();
+                Console.WriteLine("Your move is invalid!");
+                Console.WriteLine("Please enter again!");
+                Console.Write("\n");
                 SelectPosition();
 
             }
         }
 
 
-        public bool MovesJudge()//While JudgeMoveRules is pass, which means this move is valid, then determine whether this move satisfy the selected piece's corresponding moving method or not
+        public bool MovesJudge()
         {
             if (board[posy / 2, posx / 2].Move() == false) { return false; }
             else return true;
 
         }
 
-        public void ClearWrongInput()//To delete error messages once player's input is invalid,because once the player have input error coordinates many times,the console will look messy
-        {
-                Console.Write("\n");
-                Console.ReadKey();
-                Console.Clear();
-                DrawingBoard();
-        }
+
     }
 
 }

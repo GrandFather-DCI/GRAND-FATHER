@@ -3,7 +3,7 @@ namespace GRAND_FATHER
 {
     public class GameDisplay
     {
-        public static string[,] displayboard = new string[20, 18];  //Create a displayboard which will present on the console table
+        public static string[,] displayboard = new string[20, 18]; 
         
         
 
@@ -31,14 +31,14 @@ namespace GRAND_FATHER
             Console.WriteLine();
             Console.Clear();
         }
-        public void Storingboard()//Print the chessboard in displayboard
+        public void Storingboard()
         {       
             displayboard[0, 0] = "┏-";
             displayboard[18, 0] = "┗-";
             displayboard[0, 16] = "┓";
             displayboard[18, 16] = "┛";
-            displayboard [0, 17] = " 0\tBLACK";//To remind user the upper half chessboard is belong to black player
-            displayboard[18, 17] = " 9\tRED";//To remind user the bottom half chessboard is belong to red player
+            displayboard [0, 17] = " 0";
+            displayboard[18, 17] = " 9";
 
             for (int i = 1; i < 18; i++)
             {
