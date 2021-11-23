@@ -6,13 +6,16 @@ namespace GRAND_FATHER
     {
 
         public static ChessPiece[,] board = new ChessPiece[10, 9]; //initialize an actual chessboard to store chesspiece and all the moving method
-
+       
         public static int posx;
         public static int posy;
         public static int posx2;
         public static int posy2;
         public static int turn = 0;
-        public int Gameover = 0;
+        public  int Gameover = 0;
+        public static int ErrorNumber = 0;
+
+        
 
         public void InitializeBoard()
         {
@@ -93,128 +96,64 @@ namespace GRAND_FATHER
             GameDisplay.displayboard[12, 8] = board[6, 4].ToString();
             GameDisplay.displayboard[12, 12] = board[6, 6].ToString();
             GameDisplay.displayboard[12, 16] = board[6, 8].ToString();
-            DrawingBoard();
+            GameDisplay.DrawingBoard();
 
         }
 
 
-        public static void DrawingBoard()
-        {
-
-            Console.Clear();
-
-            for (int a = 0; a < 19; a++)
-            {
-                Console.BackgroundColor = ConsoleColor.White;
-                for (int b = 0; b < 18; b++)
-                {
-
-                    if (board[a / 2, b / 2] == null)
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                    else if (board[a / 2, b / 2].Side == Side.red)
-                    {
-                        if (b % 2 == 1 || a % 2 == 1)
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                        else Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                    }
-                    else if (board[a / 2, b / 2].Side == Side.black)
-                    {
-                        if (b % 2 == 1 || a % 2 == 1)
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                        else Console.ForegroundColor = ConsoleColor.Black;
-                    }
-
-
-                    Console.Write(GameDisplay.displayboard[a, b]);
-                }
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.Blue;
-            }
-            Console.WriteLine(" 0   1   2   3   4   5   6   7   8 ");
-
-
-        }
 
         public void JudgeSide()//Determine whether the player select his or her opponent's chesspiece or select an empty place
         {
+
             if (turn % 2 == 0)
             {
-                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.red))
+                while ((board[(posy) / 2, (posx) / 2].Side == Side.red))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You select the wrong side!");
-                    Console.WriteLine("Please select your side and enter again!");
-                    Console.Write("\n");
+                    ErrorNumber = 5;
+                    GameDisplay.ErrorMessage();
                     SelectPiece();
                 }
             }
             if (turn % 2 == 1)
             {
-                while ((board[(posy) / 2, (posx) / 2] == null || board[(posy) / 2, (posx) / 2].Side == Side.black))
+                while (( board[(posy) / 2, (posx) / 2].Side == Side.black))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("You select the wrong side!");
-                    Console.WriteLine("Please select your side and enter again!");
-                    Console.Write("\n");
+                    ErrorNumber = 5;
+                    GameDisplay.ErrorMessage();
                     SelectPiece();
                 }
             }
             turn++;
         }
 
-        public void InValidMove()//Judge whether the destination's coordinate is the same as the starting point's coordinate and let player to select piece again once this condition happen 
-        {
-            while (posx == posx2 && posy == posy2)
-            {
-                turn--;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your destination is the same as your starting point!!!!");
-                Console.WriteLine("Please choose again!");
-                SelectPiece();
-                JudgeSide();
-                SelectPosition();
-            }
-        }
+
         public void SelectPiece()//Method of selecting piece
         {
-            if (turn % 2 == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine("\n");
-                Console.WriteLine("-------It's BLACK turn!!!-------\nWhich piece do you want to move?(PLEASE INPUT TWO NUMBERS. Like: 11)");
-            }
-            if (turn % 2 == 1)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine("\n");
-                Console.WriteLine("-------It's RED turn!!!-------\nWhich piece do you want to move?(PLEASE INPUT TWO NUMBERS. Like: 98)");
-            }
-            Console.WriteLine("First number is for Y-axis (0-9)\nSecond number is for X-axis (0-8)");
-
-
+            GameDisplay.SelectPieceDisplay();
+           
             string position = Console.ReadLine();
 
-            while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0')
+            while (position.Length != 2 || position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0'  )
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("This piece does not exist!");
-                Console.WriteLine("Please enter again!");
+                ErrorNumber = 2;
+                GameDisplay.ErrorMessage();
                 position = Console.ReadLine();
 
             }
 
-            while (position.Length != 2)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Please input only 2 number");
-                position = Console.ReadLine();
-            }
-
-            string position1, position2;
+            tab : string position1, position2;
             position1 = position.Substring(0, 1);
             position2 = position.Substring(1);
             posy = Convert.ToInt32(position1) * 2;
             posx = Convert.ToInt32(position2) * 2;
+
+            if(board[(posy)/2 , (posx)/ 2] == null)
+            {
+                ErrorNumber = 1;
+                GameDisplay.ErrorMessage();
+                position = Console.ReadLine();
+                goto tab;
+            }
 
         }
 
@@ -222,30 +161,16 @@ namespace GRAND_FATHER
 
         public void SelectPosition()//Method of selecting destination
         {
-            if (turn % 2 == 0)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            }
-            if (turn % 2 == 1)
-            {
-                Console.ForegroundColor = ConsoleColor.Black;
-            }
-
-            Console.WriteLine("Please enter the position you want to move:");
+            GameDisplay.SelectPositionDisplay();
+  
             string position = Console.ReadLine();
 
-             while (position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0')
+            while (position.Length != 2 || position[0] > '9' || position[0] < '0' || position[1] > '8' || position[1] < '0'  )
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your move is invalid!!");
-                Console.WriteLine("Please enter again!");
+                ErrorNumber = 2;
+                GameDisplay.ErrorMessage();
                 position = Console.ReadLine();
-            }
-            while (position.Length != 2)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Please input only 2 number");
-                position = Console.ReadLine();
+                
             }
 
             string position1, position2;
@@ -254,6 +179,8 @@ namespace GRAND_FATHER
             position2 = position.Substring(1);
             posy2 = Convert.ToInt32(position1) * 2;
             posx2 = Convert.ToInt32(position2) * 2;
+
+            
         }
 
         public void MovePiece(int posy, int posx, int posy2, int posx2)
@@ -262,13 +189,9 @@ namespace GRAND_FATHER
             if (GameDisplay.displayboard[posy2, posx2] == "帅")
                 Gameover = 2;
 
-            if(GameDisplay.displayboard[posy2, posx2] == "将")
+            if (GameDisplay.displayboard[posy2, posx2] == "将")
                 Gameover = 1;
 
-            if (GameBoard.board[posy2 / 2, posx2 / 2] == GameBoard.board[posy / 2, posx / 2])
-            {
-                InValidMove();
-            }
             GameDisplay.displayboard[posy2, posx2] = GameDisplay.displayboard[posy, posx];
             GameBoard.board[posy2 / 2, posx2 / 2] = GameBoard.board[posy / 2, posx / 2];
             GameBoard.board[posy / 2, posx / 2] = null;
@@ -303,19 +226,29 @@ namespace GRAND_FATHER
             }
             else GameDisplay.displayboard[posy, posx] = "╋-";
 
-            DrawingBoard();
+            GameDisplay.DrawingBoard();
 
         }
 
+        public void InValidMove()//Judge whether the destination's coordinate is the same as the starting point's coordinate and let player to select piece again once this condition happen 
+        {
+            while (posx == posx2 && posy == posy2)
+            {
+                turn--;
+                ErrorNumber = 3;
+                GameDisplay.ErrorMessage();
+                SelectPiece();
+                JudgeSide();
+                SelectPosition();
+            }
+        }
         public void JudgeMoveRules()//Judge whether the move is valid or not, if the move is invalid, ask the player to select again
         {
 
             while (MovesJudge() == false)
-            {   
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Your move is invalid!");
-                Console.WriteLine("Please enter again!");
-                Console.Write("\n");
+            {
+                ErrorNumber = 4;
+                GameDisplay.ErrorMessage();
                 SelectPosition();
 
             }
@@ -324,7 +257,7 @@ namespace GRAND_FATHER
 
         public bool MovesJudge()//While JudgeMoveRule is pass,which means this move is valid,then determine whether this move satisfy the selected piece's corresponding moving method or not
         {
-            if (board[posy / 2, posx / 2].Move() == false) { return false; }
+            if (board[posy / 2, posx / 2].Move(posx, posy, posx2,posy2,board) == false) { return false; }
             else return true;
 
         }

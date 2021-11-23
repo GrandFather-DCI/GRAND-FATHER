@@ -3,7 +3,6 @@ using System;
 
 namespace GRAND_FATHER
 {
-    //public enum 
 
 
     public enum Side
@@ -30,7 +29,75 @@ namespace GRAND_FATHER
     public class ChessPiece
     {
 
+        public bool OneStep()
+        {
+            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2 && (GameBoard.posy - GameBoard.posy2) == 0 || (GameBoard.posx - GameBoard.posx2) == 0 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)
+            {
+                return true;
+            }
+            return false;
+        }
 
+        public bool Logic()
+        {
+            if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool MoveInSquar()
+        {
+            if (GameBoard.posy2 > 4 && GameBoard.posy2 < 14 || GameBoard.posx2 < 6 || GameBoard.posx2 > 10)
+            {
+                return true;
+            }
+            return false;
+        }
+        public int XGap()
+        {
+            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2)
+            {
+                return 2;
+            }
+            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 4)
+            {
+                return 4;
+            }
+            return 0;
+        }
+
+        public int YGap()
+        {
+            if (System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)
+            {
+                return 2;
+            }
+            if (System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 4)
+            {
+                return 4;
+            }
+            return 0;
+        }
+
+        public bool Vertical()
+        {
+            if (GameBoard.posx == GameBoard.posx2 && GameBoard.posy != GameBoard.posy2)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool Horizontal()
+        {
+            if (GameBoard.posy == GameBoard.posy2 && GameBoard.posx != GameBoard.posx2)
+            {
+                return true;
+            }
+            return false;
+        }
         public Side Side { get; set; }
         public PieceTypes Type { get; set; }
 
@@ -39,7 +106,7 @@ namespace GRAND_FATHER
             return "";
         }
 
-        public virtual bool Move()
+        public virtual bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
             return false;
         }
@@ -50,24 +117,6 @@ namespace GRAND_FATHER
             this.Side = side;
         }
     }
-
-
-
-
-
-    // public class blank : ChessPiece
-    // {
-    //     public blank(Side side) : base(side)
-    //     {
-    //         this.Type = PieceTypes.blank;
-    //     }
-
-    //     public override string ToString()
-    //     {
-    //         return "";
-
-    //     }
-    // }
 
 
 
@@ -85,13 +134,13 @@ namespace GRAND_FATHER
 
         }
 
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2 && (GameBoard.posy - GameBoard.posy2) == 0 || (GameBoard.posx - GameBoard.posx2) == 0 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)//General can only move one step at a time
+            if (OneStep() == true)
             {
-                if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)//Chesspiece can move when its destination don't have pieces or the destination piece's side is not as same as itself
+                if (Logic() == true)
                 {
-                    if (GameBoard.posy2 > 4 && GameBoard.posy2 < 14 || GameBoard.posx2 < 6 || GameBoard.posx2 > 10) //General can only move in the General square
+                    if (MoveInSquar() == true)
                         return false;
                     else return true;
                 }
@@ -117,13 +166,13 @@ namespace GRAND_FATHER
             if (Side == Side.red) { return "仕"; }
             else { return "士"; }
         }
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)//Advisor can only move along the diagonal
+            if (XGap() == 2 && YGap() == 2)
             {
-                if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)//Chesspiece can move when its destination don't have pieces or the destination piece's side is not as same as itself
+                if (Logic() == true)
                 {
-                    if (GameBoard.posy2 > 4 && GameBoard.posy2 < 14 || GameBoard.posx2 < 6 || GameBoard.posx2 > 10)//Advisor can only move in the General square
+                    if (MoveInSquar() == true)
                         return false;
                     else return true;
                 }
@@ -149,24 +198,24 @@ namespace GRAND_FATHER
             if (Side == Side.red) { return "相"; }
             else { return "象"; }
         }
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 4 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 4)//Elephant 's moving method , once it move, its x-coordinate and y-coordinate must each change 2 step.
+            if (XGap() == 4 && YGap() == 4)
             {
-                if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)//Chesspiece can move when its destination don't have pieces or the destination piece's side is not as same as itself
+                if (Logic() == true)
                 {
-                    if (GameBoard.board[(GameBoard.posy / 2 + GameBoard.posy2 / 2) / 2, (GameBoard.posx / 2 + GameBoard.posx2 / 2) / 2] == null)//Elephant can move only when there is no chesspiece in the diagonal line in its moving path
+                    if (board[(posy / 2 + posy2 / 2) / 2, (posx / 2 + posx2 / 2) / 2] == null)
                     {    //Determine if there are chess pieces
-                        if (GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side == Side.black)  //Cause Elephant cannot cross the river,so we have two different situation
+                        if (board[posy / 2, posx / 2].Side == Side.black)
                         {
-                            if (GameBoard.posy2 > 8)
+                            if (posy2 > 8)
                                 return false;
                             else
                                 return true;
                         }
-                        else 
+                        else
                         {
-                            if (GameBoard.posy2 < 10)
+                            if (posy2 < 10)
                                 return false;
                             else
                                 return true;
@@ -194,21 +243,21 @@ namespace GRAND_FATHER
             return "马";
         }
 
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)//Chesspiece can move when its destination don't have pieces or the destination piece's side is not as same as itself
-            {    
-                if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 4)//Horse 's moving method , its coordinates' changes must satisfy this condition
+            if (Logic() == true)
+            {
+                if (XGap() == 2 && YGap() == 4)
                 {
-                    if (GameBoard.board[(GameBoard.posy / 2 + GameBoard.posy2 / 2) / 2, GameBoard.posx / 2] != null)//Horse's moving rule, horse will stuck once there is a chesspiece in a particular place 
+                    if (board[(posy / 2 + posy2 / 2) / 2, posx / 2] != null)
                     {
                         return false;
                     }
                     return true;
                 }
-                else if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 4 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)
+                else if (XGap() == 4 && YGap() == 2)
                 {
-                    if (GameBoard.board[GameBoard.posy / 2, (GameBoard.posx / 2 + GameBoard.posx2 / 2) / 2] != null)
+                    if (board[posy / 2, (posx / 2 + posx2 / 2) / 2] != null)
                     {
                         return false;
                     }
@@ -233,41 +282,49 @@ namespace GRAND_FATHER
         {
             return "车";
         }
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (GameBoard.posx == GameBoard.posx2 && GameBoard.posy != GameBoard.posy2)//Chariot move in vertical way
+            int i,j,rangeChariot;
+            if (Vertical() == true)//Chariot move in vertical way
             {
-                if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)
+                i = posy < posy2 ? posy : posy2;//The x-coordinate of the starting point
+                j = posy > posy2 ? posy : posy2;
+                if (Logic() == true)
                 {
-                    for (int i = (GameBoard.posy / 2) + 1; i <= (GameBoard.posy2 / 2) - 1; i++)//Set a for loop to test whether there are pieces in its moving path
+                    for (rangeChariot= (i / 2) + 1; rangeChariot <= (j / 2) - 1; rangeChariot++)//Set a for loop to test whether there are pieces in its moving path
                     {
-                        if (GameBoard.board[i, GameBoard.posx / 2] != null)//Chariot can move when there are no pieces in its moving pat
+                        if (board[rangeChariot, posx / 2] != null)//Chariot can move when there are no pieces in its moving pat
                             return false;
                     }
                     return true;
                 }
-                else if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side == GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side) return false;
+                //else if (board[posy2 / 2, posx2 / 2].Side == board[posy / 2, posx / 2].Side) 
+                return false;
             }
 
-            if (GameBoard.posy == GameBoard.posy2 && GameBoard.posx != GameBoard.posx2)//Chariot move in horizontal way
+            if (Horizontal() == true)//Chariot move in horizontal way
             {
-                if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)
+                i = posx < posx2 ? posx : posx2;
+                j = posx > posx2 ? posx : posx2;
+                if (Logic() == true)
                 {
 
-                    for (int i = (GameBoard.posx / 2) + 1; i <= (GameBoard.posx2 / 2) - 1; i++)
+                    for (rangeChariot = (i / 2) + 1; rangeChariot <= (j / 2) - 1;rangeChariot++)
                     {
-                        if (GameBoard.board[GameBoard.posy / 2, i] != null)
+                        if (board[posy / 2,rangeChariot] != null)
                             return false;
                     }
                     return true;
 
                 }
-                else if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side == GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side) return false;
+                //else if (board[posy2 / 2, posx2 / 2].Side == board[posy / 2, posx / 2].Side) 
+                return false;
 
             }
             return false;
         }
-    }
+
+    }  
 
     public class Cannon : ChessPiece
     {
@@ -281,58 +338,59 @@ namespace GRAND_FATHER
             return "炮";
         }
 
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            int count = 0;//To count how many pieces are in its moving path
+            int count = 0;
             int i, j, rangeCannon;
-            if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null ||GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)//Chesspiece can move when its destination don't have pieces or the destination piece's side is not as same as itself
-            {    
-            if (GameBoard.posx2 == GameBoard.posx)//Canon move in vertical way
+            if (Logic() == true)
             {
-                i = GameBoard.posy < GameBoard.posy2 ? GameBoard.posy : GameBoard.posy2;//The x-coordinate of the starting point
-                j = GameBoard.posy > GameBoard.posy2 ? GameBoard.posy : GameBoard.posy2;//The y-coordinate of the starting point
-                for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
+                if (Vertical() == true)
                 {
-                    if (GameBoard.board[rangeCannon, GameBoard.posx2 / 2] != null)//Judge whether there are pieces between its starting point and destination
+                    i = posy < posy2 ? posy : posy2;
+                    j = posy > posy2 ? posy : posy2;
+                    for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
                     {
-                        count++;
+                        if (board[rangeCannon, posx2 / 2] != null)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count > 1)
+                    {
+                        return false;
                     }
                 }
-                if (count > 1)
+                else if (Horizontal() == true)
+                {
+                    i = posx < posx2 ? posx : posx2;
+                    j = posx > posx2 ? posx : posx2;
+                    for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
+                    {
+                        if (board[posy2 / 2, rangeCannon] != null)
+                        {
+                            count++;
+                        }
+                    }
+                    if (count > 1)
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return false;
                 }
-            }
-            else if (GameBoard.posy2 == GameBoard.posy)//Canon move in horizontal way
-            {
-                i = GameBoard.posx < GameBoard.posx2 ? GameBoard.posx : GameBoard.posx2;
-                j = GameBoard.posx > GameBoard.posx2 ? GameBoard.posx : GameBoard.posx2;
-                for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
-                {
-                    if (GameBoard.board[GameBoard.posy2 / 2, rangeCannon] != null)//Judge whether there are pieces between its starting point and destination
-                    {
-                        count++;
-                    }
-                }
-                if (count > 1)
+                if (count == 0 && board[posy2 / 2, posx2 / 2] != null)
                 {
                     return false;
                 }
+                if (count == 1 && board[posy2 / 2, posx2 / 2] == null)
+                {
+                    return false;
+                }
+                return true;
             }
-            else
-            {
-                return false;
-            }
-            if (count == 0 && GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] != null)//There are no pieces in its moving path and the destination has piece
-            {
-                return false;
-            }
-            if (count == 1 && GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null)
-            {
-                return false;
-            }
-            return true;
-          }return false;
+            return false;
 
         }
 
@@ -352,50 +410,55 @@ namespace GRAND_FATHER
             else { return "卒"; }
         }
 
-        public override bool Move()
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)
+            if (Logic() == true)
             {
-                if (GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side == Side.red)//Move rule for red Player's soldier
+                if (board[posy / 2, posx / 2].Side == Side.red)
                 {
-                    if (GameBoard.posy2 >= 10)//Rules for Soldier once they haven't cross the river
+                    if (posy2 >= 10)
                     {
-                        if (GameBoard.posx != GameBoard.posx2 || GameBoard.posy - GameBoard.posy2 > 2 || GameBoard.posy - GameBoard.posy2 < 0)//1.soldier can't move in horizontal way 2.Soldier can only move 1 step at a time 3.Soldier can't move backward
+                        if (posx != posx2 || posy - posy2 > 2 || posy - posy2 < 0)
                         {
                             return false;
-                        }   return true;
+                        }
+                        return true;
                     }
 
 
-                    if (GameBoard.posy2 < 10)//Rules for Soldier once they cross the river
+                    if (posy2 < 10)
                     {
-                        if (GameBoard.posy == GameBoard.posy2 && System.Math.Abs(GameBoard.posx - GameBoard.posx2) > 2 || GameBoard.posx == GameBoard.posx2 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) > 2 || GameBoard.posy - GameBoard.posy2 < 0)
+                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 2 || posx == posx2 && System.Math.Abs(posy - posy2) > 2 || posy - posy2 < 0)
                         {
                             return false;
-                        }   return true;
+                        }
+                        return true;
                     }
 
                 }
-                else//Move rule for black Player's soldier
+                else
                 {
-                    if (GameBoard.posy2 <= 8)
+                    if (posy2 <= 8)
                     {
-                        if (GameBoard.posx != GameBoard.posx2 || GameBoard.posy2 - GameBoard.posy > 2 || GameBoard.posy2 - GameBoard.posy < 0)
+                        if (posx != posx2 || posy2 - posy > 2 || posy2 - posy < 0)
                         {
                             return false;
-                        }   return true;
+                        }
+                        return true;
                     }
-                    if (GameBoard.posy2 > 8)
+                    if (posy2 > 8)
                     {
-                        if (GameBoard.posy == GameBoard.posy2 && System.Math.Abs(GameBoard.posx - GameBoard.posx2) > 2 || GameBoard.posx == GameBoard.posx2 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) > 2 || GameBoard.posy2 - GameBoard.posy < 0)
+                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 2 || posx == posx2 && System.Math.Abs(posy - posy2) > 2 || posy2 - posy < 0)
                         {
                             return false;
-                        }   return true;
+                        }
+                        return true;
                     }
                 }
 
-            }return false;
-            
+            }
+            return false;
+
         }
 
     }
