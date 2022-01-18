@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "zRdpXffzFCCquGJquXJ9sODfuGAKNzVmttAPernAziP5fGdA3A16sEsODinDu88xMLHL3r7R9ZBNYN5cw+armA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\83561\\Desktop\\GRAND-FATHER\\GRAND-FATHER.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\83561\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}

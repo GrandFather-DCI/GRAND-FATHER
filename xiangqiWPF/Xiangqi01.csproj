@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resource\background.png" />
+    <None Remove="Resource\bg.png" />
+    <None Remove="Resource\bg3.jpg" />
+    <None Remove="Resource\BlackAdviser.png" />
+    <None Remove="Resource\BlackAdviserSelect.png" />
+    <None Remove="Resource\BlackCannon.png" />
+    <None Remove="Resource\BlackCannonSelect.png" />
+    <None Remove="Resource\BlackCar.png" />
+    <None Remove="Resource\BlackCarSelect.png" />
+    <None Remove="Resource\BlackElephant.png" />
+    <None Remove="Resource\BlackElephantSelect.png" />
+    <None Remove="Resource\BlackGeneral.png" />
+    <None Remove="Resource\BlackGeneralSelect.png" />
+    <None Remove="Resource\BlackHorse.png" />
+    <None Remove="Resource\BlackHorseSelect.png" />
+    <None Remove="Resource\BlackSoldier.png" />
+    <None Remove="Resource\BlackSoldierSelect.png" />
+    <None Remove="Resource\blank.png" />
+    <None Remove="Resource\RedAdviser.png" />
+    <None Remove="Resource\RedAdviserSelect.png" />
+    <None Remove="Resource\RedCannon.png" />
+    <None Remove="Resource\RedCannonSelect.png" />
+    <None Remove="Resource\RedCar.png" />
+    <None Remove="Resource\RedCarSelect.png" />
+    <None Remove="Resource\RedElephant.png" />
+    <None Remove="Resource\RedElephantSelect.png" />
+    <None Remove="Resource\RedGeneral.png" />
+    <None Remove="Resource\RedGeneralSelect.png" />
+    <None Remove="Resource\RedHorse.png" />
+    <None Remove="Resource\RedHorseSelect.png" />
+    <None Remove="Resource\RedSoldier.png" />
+    <None Remove="Resource\RedSoldierSelect.png" />
+    <None Remove="Resource\select.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\background.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\bg3.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resource\bg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\BlackAdviser.png" />
+    <Resource Include="Resource\BlackAdviserSelect.png" />
+    <Resource Include="Resource\BlackCannon.png" />
+    <Resource Include="Resource\BlackCannonSelect.png" />
+    <Resource Include="Resource\BlackCar.png" />
+    <Resource Include="Resource\BlackCarSelect.png" />
+    <Resource Include="Resource\BlackElephant.png" />
+    <Resource Include="Resource\BlackElephantSelect.png" />
+    <Resource Include="Resource\BlackGeneral.png" />
+    <Resource Include="Resource\BlackGeneralSelect.png" />
+    <Resource Include="Resource\BlackHorse.png" />
+    <Resource Include="Resource\BlackHorseSelect.png" />
+    <Resource Include="Resource\BlackSoldier.png" />
+    <Resource Include="Resource\BlackSoldierSelect.png" />
+    <Resource Include="Resource\blank.png" />
+    <Resource Include="Resource\RedAdviser.png" />
+    <Resource Include="Resource\RedAdviserSelect.png" />
+    <Resource Include="Resource\RedCannon.png" />
+    <Resource Include="Resource\RedCannonSelect.png" />
+    <Resource Include="Resource\RedCar.png" />
+    <Resource Include="Resource\RedCarSelect.png" />
+    <Resource Include="Resource\RedElephant.png" />
+    <Resource Include="Resource\RedElephantSelect.png" />
+    <Resource Include="Resource\RedGeneral.png" />
+    <Resource Include="Resource\RedGeneralSelect.png" />
+    <Resource Include="Resource\RedHorse.png" />
+    <Resource Include="Resource\RedHorseSelect.png" />
+    <Resource Include="Resource\RedSoldier.png" />
+    <Resource Include="Resource\RedSoldierSelect.png" />
+    <Resource Include="Resource\select.png" />
+  </ItemGroup>
+
+</Project>
