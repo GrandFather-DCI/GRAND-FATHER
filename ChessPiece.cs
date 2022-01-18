@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 
 
-namespace GRAND_FATHER
+namespace Xiangqi01
 {
 
 
@@ -9,6 +9,7 @@ namespace GRAND_FATHER
     {
         red,
         black,
+        blank,
 
     }
 
@@ -22,6 +23,7 @@ namespace GRAND_FATHER
         Chariot,
         Cannon,
         Soldier,
+        blank,
         Default,
     }
 
@@ -29,75 +31,6 @@ namespace GRAND_FATHER
     public class ChessPiece
     {
 
-        public bool OneStep()
-        {
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2 && (GameBoard.posy - GameBoard.posy2) == 0 || (GameBoard.posx - GameBoard.posx2) == 0 && System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public bool Logic()
-        {
-            if (GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2] == null || GameBoard.board[GameBoard.posy2 / 2, GameBoard.posx2 / 2].Side != GameBoard.board[GameBoard.posy / 2, GameBoard.posx / 2].Side)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public bool MoveInSquar()
-        {
-            if (GameBoard.posy2 > 4 && GameBoard.posy2 < 14 || GameBoard.posx2 < 6 || GameBoard.posx2 > 10)
-            {
-                return true;
-            }
-            return false;
-        }
-        public int XGap()
-        {
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 2)
-            {
-                return 2;
-            }
-            if (System.Math.Abs(GameBoard.posx - GameBoard.posx2) == 4)
-            {
-                return 4;
-            }
-            return 0;
-        }
-
-        public int YGap()
-        {
-            if (System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 2)
-            {
-                return 2;
-            }
-            if (System.Math.Abs(GameBoard.posy - GameBoard.posy2) == 4)
-            {
-                return 4;
-            }
-            return 0;
-        }
-
-        public bool Vertical()
-        {
-            if (GameBoard.posx == GameBoard.posx2 && GameBoard.posy != GameBoard.posy2)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public bool Horizontal()
-        {
-            if (GameBoard.posy == GameBoard.posy2 && GameBoard.posx != GameBoard.posx2)
-            {
-                return true;
-            }
-            return false;
-        }
         public Side Side { get; set; }
         public PieceTypes Type { get; set; }
 
@@ -105,6 +38,13 @@ namespace GRAND_FATHER
         {
             return "";
         }
+
+
+        public virtual string SelcetChess()
+        {
+            return "";
+        }
+
 
         public virtual bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
@@ -119,6 +59,30 @@ namespace GRAND_FATHER
     }
 
 
+    public class blank : ChessPiece
+    {
+        public blank(Side side) : base(side)
+        {
+            this.Type = PieceTypes.blank;
+        }
+        public override String ToString()
+        {
+            return "..\\..\\..\\Resource\\blank.png";
+        }
+
+        public override string SelcetChess()
+        {
+            return "..\\..\\..\\Resource\\select.png";
+        }
+
+        public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
+        {
+            return true;
+        }
+    }
+
+
+
 
     public class General : ChessPiece
     {
@@ -129,22 +93,30 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            if (Side == Side.red) { return "帅"; }
-            else { return "将"; }
-
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackGeneral.png"; }
+            else { return "..\\..\\..\\Resource\\RedGeneral.png"; }
         }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackGeneralSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedGeneralSelect.png"; }
+        }
+
+
 
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (OneStep() == true)
+            if (System.Math.Abs(posx - posx2) == 1 && (posy - posy2) == 0 || (posx - posx2) == 0 && System.Math.Abs(posy - posy2) == 1)
             {
-                if (Logic() == true)
-                {
-                    if (MoveInSquar() == true)
-                        return false;
-                    else return true;
-                }
-                else return false;
+                if (board[posy2, posx2].Side == board[posy, posx].Side)
+                    return false;
+                 
+                if (posy2 > 2 && posy2 < 7 || posx2 < 3 || posx2 > 5)
+                    return false;
+                    
+                
+                else return true;
             }
             else
                 return false;
@@ -163,16 +135,26 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            if (Side == Side.red) { return "仕"; }
-            else { return "士"; }
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackAdviser.png"; }
+            else { return "..\\..\\..\\Resource\\RedAdviser.png"; }
         }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackAdviserSelect.png"; }
+            else {return "..\\..\\..\\Resource\\RedAdviserSelect.png";}
+        }
+
+
+
+
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (XGap() == 2 && YGap() == 2)
+            if (System.Math.Abs(posx - posx2) == 1 && System.Math.Abs(posy - posy2) == 1)
             {
-                if (Logic() == true)
+                if (board[posy2, posx2].Side != board[posy, posx].Side)
                 {
-                    if (MoveInSquar() == true)
+                    if (posy2 > 2 && posy2 < 7 || posx2 < 3 || posx2 > 5)
                         return false;
                     else return true;
                 }
@@ -195,27 +177,35 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            if (Side == Side.red) { return "相"; }
-            else { return "象"; }
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackElephant.png"; }
+            else { return "..\\..\\..\\Resource\\RedElephant.png"; }
         }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackElephantSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedElephantSelect.png"; }
+        }
+
+
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (XGap() == 4 && YGap() == 4)
+            if (System.Math.Abs(posx - posx2) == 2 && System.Math.Abs(posy - posy2) == 2)
             {
-                if (Logic() == true)
+                if (board[posy2, posx2].Side != board[posy, posx].Side)
                 {
-                    if (board[(posy / 2 + posy2 / 2) / 2, (posx / 2 + posx2 / 2) / 2] == null)
+                    if (board[(posy + posy2) / 2, (posx + posx2) / 2].Side == Side.blank)
                     {    //Determine if there are chess pieces
-                        if (board[posy / 2, posx / 2].Side == Side.black)
+                        if (board[posy, posx].Side == Side.black)
                         {
-                            if (posy2 > 8)
+                            if (posy2 > 4)
                                 return false;
                             else
                                 return true;
                         }
                         else
                         {
-                            if (posy2 < 10)
+                            if (posy2 < 5)
                                 return false;
                             else
                                 return true;
@@ -240,32 +230,38 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            return "马";
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackHorse.png"; }
+            else { return "..\\..\\..\\Resource\\RedHorse.png"; }
+        }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackHorseSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedHorseSelect.png"; }
         }
 
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (Logic() == true)
-            {
-                if (XGap() == 2 && YGap() == 4)
+                if (board[posy2, posx2].Side == board[posy, posx].Side)
+                return false;
+                if (System.Math.Abs(posx - posx2) == 1 && System.Math.Abs(posy - posy2) == 2)
                 {
-                    if (board[(posy / 2 + posy2 / 2) / 2, posx / 2] != null)
+                    if (board[(posy + posy2) / 2, posx].Side != Side.blank)
                     {
                         return false;
                     }
                     return true;
                 }
-                else if (XGap() == 4 && YGap() == 2)
+                else if (System.Math.Abs(posx - posx2) == 2 && System.Math.Abs(posy - posy2) == 1)
                 {
-                    if (board[posy / 2, (posx / 2 + posx2 / 2) / 2] != null)
+                    if (board[posy, (posx + posx2) / 2].Side != Side.blank)
                     {
                         return false;
                     }
                     return true;
                 }
-            }
-            return false;
-
+                return false;
+            
         }
     }
 
@@ -280,20 +276,28 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            return "车";
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackCar.png"; }
+            else { return "..\\..\\..\\Resource\\RedCar.png"; }
         }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackCarSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedCarSelect.png"; }
+        }
+
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            int i,j,rangeChariot;
-            if (Vertical() == true)//Chariot move in vertical way
+            int i, j, rangeChariot;
+            if (posx == posx2 && posy != posy2)//Chariot move in vertical way
             {
                 i = posy < posy2 ? posy : posy2;//The x-coordinate of the starting point
                 j = posy > posy2 ? posy : posy2;
-                if (Logic() == true)
+                if (board[posy2, posx2].Side != board[posy, posx].Side)
                 {
-                    for (rangeChariot= (i / 2) + 1; rangeChariot <= (j / 2) - 1; rangeChariot++)//Set a for loop to test whether there are pieces in its moving path
+                    for (rangeChariot = (i ) + 1; rangeChariot <= (j ) - 1; rangeChariot++)//Set a for loop to test whether there are pieces in its moving path
                     {
-                        if (board[rangeChariot, posx / 2] != null)//Chariot can move when there are no pieces in its moving pat
+                        if (board[rangeChariot, posx].Side != Side.blank)//Chariot can move when there are no pieces in its moving pat
                             return false;
                     }
                     return true;
@@ -302,16 +306,16 @@ namespace GRAND_FATHER
                 return false;
             }
 
-            if (Horizontal() == true)//Chariot move in horizontal way
+            if (posx != posx2 && posy == posy2)//Chariot move in horizontal way
             {
                 i = posx < posx2 ? posx : posx2;
                 j = posx > posx2 ? posx : posx2;
-                if (Logic() == true)
+                if (board[posy2, posx2].Side != board[posy, posx].Side)
                 {
 
-                    for (rangeChariot = (i / 2) + 1; rangeChariot <= (j / 2) - 1;rangeChariot++)
+                    for (rangeChariot = (i) + 1; rangeChariot <= (j) - 1; rangeChariot++)
                     {
-                        if (board[posy / 2,rangeChariot] != null)
+                        if (board[posy, rangeChariot].Side != Side.blank)
                             return false;
                     }
                     return true;
@@ -324,7 +328,7 @@ namespace GRAND_FATHER
             return false;
         }
 
-    }  
+    }
 
     public class Cannon : ChessPiece
     {
@@ -335,22 +339,30 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            return "炮";
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackCannon.png"; }
+            else{ return "..\\..\\..\\Resource\\RedCannon.png"; }
+
+        }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackCannonSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedCannonSelect.png"; }
+
         }
 
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
             int count = 0;
             int i, j, rangeCannon;
-            if (Logic() == true)
-            {
-                if (Vertical() == true)
+            
+                if (posx2 == posx)
                 {
                     i = posy < posy2 ? posy : posy2;
                     j = posy > posy2 ? posy : posy2;
-                    for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
+                    for (rangeCannon = i + 1; rangeCannon <= j -1; rangeCannon++)
                     {
-                        if (board[rangeCannon, posx2 / 2] != null)
+                        if (board[rangeCannon, posx2].Side != Side.blank)
                         {
                             count++;
                         }
@@ -359,14 +371,15 @@ namespace GRAND_FATHER
                     {
                         return false;
                     }
+                    
                 }
-                else if (Horizontal() == true)
+                else if (posy2 == posy)
                 {
                     i = posx < posx2 ? posx : posx2;
                     j = posx > posx2 ? posx : posx2;
-                    for (rangeCannon = i / 2 + 1; rangeCannon < j / 2; rangeCannon++)
+                    for (rangeCannon = i + 1; rangeCannon <= j - 1; rangeCannon++)
                     {
-                        if (board[posy2 / 2, rangeCannon] != null)
+                        if (board[posy2, rangeCannon].Side != Side.blank)
                         {
                             count++;
                         }
@@ -375,22 +388,23 @@ namespace GRAND_FATHER
                     {
                         return false;
                     }
+                    
                 }
                 else
                 {
                     return false;
                 }
-                if (count == 0 && board[posy2 / 2, posx2 / 2] != null)
-                {
+                if (count == 0 && board[posy2, posx2].Side != Side.blank)
                     return false;
-                }
-                if (count == 1 && board[posy2 / 2, posx2 / 2] == null)
-                {
+                
+                if (count == 1 && board[posy2, posx2].Side == Side.blank)
                     return false;
-                }
+                if (board[posy2, posx2].Side == board[posy, posx].Side)  //目的点是同一方的棋子
+                    return false;
+
                 return true;
-            }
-            return false;
+            
+            
 
         }
 
@@ -406,19 +420,27 @@ namespace GRAND_FATHER
 
         public override string ToString()
         {
-            if (Side == Side.red) { return "兵"; }
-            else { return "卒"; }
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackSoldier.png"; }
+            else { return "..\\..\\..\\Resource\\RedSoldier.png"; }
+        }
+
+        public override string SelcetChess()
+        {
+            if (Side == Side.black) { return "..\\..\\..\\Resource\\BlackSoldierSelect.png"; }
+            else { return "..\\..\\..\\Resource\\RedSoldierSelect.png"; }
         }
 
         public override bool Move(int posx, int posy, int posx2, int posy2, ChessPiece[,] board)
         {
-            if (Logic() == true)
-            {
-                if (board[posy / 2, posx / 2].Side == Side.red)
+                if (board[posy2, posx2].Side == board[posy, posx].Side)  //目的点是同一方的棋子
+                        return false;
+                if (board[posy, posx].Side == Side.red)
                 {
-                    if (posy2 >= 10)
+                    if (System.Math.Abs(posx - posx2) > 0 && System.Math.Abs(posy - posy2) > 0)  
+                        return false;
+                    if (posy2 >= 5)
                     {
-                        if (posx != posx2 || posy - posy2 > 2 || posy - posy2 < 0)
+                        if (posx != posx2 || posy - posy2 > 1 || posy - posy2 < 0)
                         {
                             return false;
                         }
@@ -426,37 +448,38 @@ namespace GRAND_FATHER
                     }
 
 
-                    if (posy2 < 10)
+                    if (posy2 < 5)
                     {
-                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 2 || posx == posx2 && System.Math.Abs(posy - posy2) > 2 || posy - posy2 < 0)
+                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 1 || posx == posx2 && System.Math.Abs(posy - posy2) > 1 || posy - posy2 < 0)
                         {
                             return false;
                         }
                         return true;
                     }
+                    
 
                 }
                 else
                 {
-                    if (posy2 <= 8)
+                    if (System.Math.Abs(posx - posx2) > 0 && System.Math.Abs(posy - posy2) > 0)  
+                        return false;
+                    if (posy2 <= 4)
                     {
-                        if (posx != posx2 || posy2 - posy > 2 || posy2 - posy < 0)
+                        if (posx != posx2 || posy2 - posy > 1 || posy2 - posy < 0)
                         {
                             return false;
                         }
                         return true;
                     }
-                    if (posy2 > 8)
+                    if (posy2 > 4)
                     {
-                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 2 || posx == posx2 && System.Math.Abs(posy - posy2) > 2 || posy2 - posy < 0)
+                        if (posy == posy2 && System.Math.Abs(posx - posx2) > 1 || posx == posx2 && System.Math.Abs(posy - posy2) > 1 || posy2 - posy < 0)
                         {
                             return false;
                         }
                         return true;
                     }
                 }
-
-            }
             return false;
 
         }
@@ -466,19 +489,5 @@ namespace GRAND_FATHER
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
